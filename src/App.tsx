@@ -1,20 +1,58 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import NavigationDrawer from "./navigation/NavigationDrawer";
+import { UserProvider } from "./context/UserContext";
+import { ThemeProvider, useTheme } from './assets/themes/ThemeContext';
+import Toast from "react-native-toast-message";
+
+const AppContent: React.FC = () => {
+    const { theme } = useTheme();
+
+    const navigationTheme = theme.dark ? DarkTheme : DefaultTheme;
+
+    return (
+        <NavigationContainer
+            theme={{
+                ...navigationTheme,
+                colors: {
+                    ...navigationTheme.colors,
+                    background: theme.colors.background,
+                    text: theme.colors.text,
+                    border: theme.colors.border,
+                    notification: theme.colors.notification,
+                },
+                fonts: {
+                    regular: {
+                        fontFamily: theme.fonts.regular,
+                        fontWeight: 'bold'
+                    },
+                    bold: {
+                        fontFamily: theme.fonts.bold,
+                        fontWeight: 'bold'
+                    },
+                    medium: {
+                        fontFamily: '',
+                        fontWeight: 'bold'
+                    },
+                    heavy: {
+                        fontFamily: '',
+                        fontWeight: 'bold'
+                    }
+                },
+            }}
+        >
+            <UserProvider>
+                <NavigationDrawer />
+            </UserProvider>
+            <Toast />
+        </NavigationContainer>
+    );
+};
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    return (
+        <ThemeProvider>
+            <AppContent />
+        </ThemeProvider>
+    );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

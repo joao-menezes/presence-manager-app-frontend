@@ -1,21 +1,27 @@
-export const darkTheme = {
+import { Theme } from "./theme.types";
+
+export const darkTheme: Theme = {
+    dark: true,
     colors: {
-        background: '#1e1e1e',
+        background: '#121212',
         text: '#fff',
-        primary: '#81b0ff',
-        secondary: '#444',
-        border: '#444',
-        inputBackground: '#333',
+        border: '#333',
+        notification: '#bb86fc',
+        primary: '#c9a1ff',
+        card: '#333',
+        inputBackground: '#444',
         inputText: '#fff',
-        buttonBackground: '#444',
-        buttonText: '#ccc',
         footerBackground: '#333',
-        footerText: '#fff',
+        footerText: '#bb86fc',
+        secondary: '#f5f5f5',
+        footerBackgroundPressed: '#8a8a8a',
+        placeholder: '#888',
+        selectedItem: '#0066cc',
+        avatarBackground: '#bb86fc',
+        subtitleText: '#bbb',
     },
-    font: {
-        regular: 'Arial, sans-serif',
-        bold: 'Arial-Bold, sans-serif',
+    fonts: {
+        regular: 'Arial',
+        bold: 'Arial-Bold',
     },
 };
-
-export type Theme = typeof darkTheme;

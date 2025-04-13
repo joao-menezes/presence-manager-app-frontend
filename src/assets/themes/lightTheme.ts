@@ -1,22 +1,27 @@
-// src/themes/lightTheme.ts
-export const lightTheme = {
+import {Theme} from "./theme.types";
+
+export const lightTheme: Theme = {
+    dark: false,
     colors: {
-        background: '#f0f0f0',
-        text: '#333',
+        background: '#fff',
+        text: '#000',
+        border: '#ddd',
+        notification: '#007bff',
         primary: '#007bff',
-        secondary: '#81b0ff',
-        border: '#ccc',
+        card: '#f0f0f0',
         inputBackground: '#fff',
-        inputText: '#333',
-        buttonBackground: '#007bff',
-        buttonText: '#fff',
-        footerBackground: '#f8f8f8',
-        footerText: '#ff0000',
+        inputText: '#000',
+        footerBackground: '#f5f5f5',
+        footerText: '#007bff',
+        secondary: '#f5f5f5',
+        footerBackgroundPressed: '#e0e0e0',
+        placeholder: '#888',
+        selectedItem: '#e3f2fd',
+        avatarBackground: '#007bff',
+        subtitleText: '#666',
     },
-    font: {
-        regular: 'Arial, sans-serif',
-        bold: 'Arial-Bold, sans-serif',
+    fonts: {
+        regular: 'Arial',
+        bold: 'Arial-Bold',
     },
 };
-
-export type Theme = typeof lightTheme;
