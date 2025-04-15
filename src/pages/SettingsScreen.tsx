@@ -1,96 +1,152 @@
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, View, Text, Switch, TextInput, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '../assets/themes/ThemeContext';
+import {
+    SafeAreaView,
+    StyleSheet,
+    View,
+    Text,
+    TextInput,
+    Pressable,
+    TouchableOpacity,
+    ScrollView
+} from 'react-native';
+import { Ionicons, Feather } from '@expo/vector-icons';
+import ThemeToggleButton from '../Components/ThemeToggleButton';
+import {useTheme} from "../context/ThemeContext";
 
 export const SettingsScreen: React.FC = () => {
     const { theme, toggleTheme } = useTheme();
-    const [username, setUsername] = useState("João Silva");
+    const [username, setUsername] = useState('João Silva');
 
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-            <View style={styles.headerContainer}>
+            {/* Header */}
+            <View style={styles.header}>
                 <Text style={[styles.headerText, { color: theme.colors.text }]}>Configurações</Text>
+                <ThemeToggleButton toggleTheme={toggleTheme} />
             </View>
 
-            <View style={styles.settingItem}>
-                <Text style={[styles.settingLabel, { color: theme.colors.text }]}>Nome do Usuário</Text>
-                <TextInput
-                    style={[styles.input, { backgroundColor: theme.colors.inputBackground, color: theme.colors.inputText }]}
-                    value={username}
-                    onChangeText={setUsername}
-                    placeholder="Digite seu nome"
-                    placeholderTextColor={theme.colors.text}
-                />
-            </View>
+            <ScrollView showsVerticalScrollIndicator={false}>
 
-            <View style={styles.settingItem}>
-                <View style={styles.row}>
-                    <Text style={[styles.settingLabel, { color: theme.colors.text }]}>Modo Escuro</Text>
-                    <Switch
-                        value={theme.dark}
-                        onValueChange={toggleTheme}
-                        trackColor={{ false: '#767577', true: theme.colors.secondary || '#bb86fc' }}
-                        thumbColor={theme.dark ? theme.colors.primary || '#6200ee' : '#f4f3f4'}
-                    />
+                <View style={styles.section}>
+                    <Text style={[styles.sectionTitle, { color: theme.colors.subtitleText }]}>Perfil</Text>
+
+                    <View style={styles.settingItem}>
+                        <Text style={[styles.settingLabel, { color: theme.colors.text }]}>Nome do Usuário</Text>
+                        <TextInput
+                            style={[
+                                styles.input,
+                                {
+                                    backgroundColor: theme.colors.inputBackground,
+                                    color: theme.colors.inputText,
+                                },
+                            ]}
+                            value={username}
+                            onChangeText={setUsername}
+                            placeholder="Digite seu nome"
+                            placeholderTextColor={theme.colors.placeholder}
+                        />
+                    </View>
                 </View>
-            </View>
 
-            <TouchableOpacity style={[styles.footerButton, { backgroundColor: "#ff4d4d" }]}>
-                <Ionicons name="log-out-outline" size={24} color={"#fff"} />
-                <Text style={[styles.footerButtonText, {color: "#fff"}]}>Sair</Text>
-            </TouchableOpacity>
+                <View style={styles.section}>
+                    <Text style={[styles.sectionTitle, { color: theme.colors.subtitleText }]}>Preferências</Text>
+
+                    <TouchableOpacity style={[styles.settingItem, styles.settingRow]}>
+                        <Feather name="bell" size={20} color={theme.colors.text} />
+                        <Text style={[styles.settingLabel, { marginLeft: 10, color: theme.colors.text }]}>
+                            Notificações
+                        </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={[styles.settingItem, styles.settingRow]}>
+                        <Feather name="globe" size={20} color={theme.colors.text} />
+                        <Text style={[styles.settingLabel, { marginLeft: 10, color: theme.colors.text }]}>
+                            Idioma
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={styles.section}>
+                    <Text style={[styles.sectionTitle, { color: theme.colors.subtitleText }]}>Segurança</Text>
+
+                    <TouchableOpacity style={[styles.settingItem, styles.settingRow]}>
+                        <Feather name="lock" size={20} color={theme.colors.text} />
+                        <Text style={[styles.settingLabel, { marginLeft: 10, color: theme.colors.text }]}>
+                            Alterar Senha
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+                <Pressable
+                    style={[styles.footerButton, { backgroundColor: theme.colors.primary }]}
+                >
+                    <Ionicons name="checkmark-done-outline" size={24} color="#fff" />
+                    <Text style={styles.footerButtonText}>Salvar Alterações</Text>
+                </Pressable>
+
+            </ScrollView>
         </SafeAreaView>
     );
 };
 
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingTop: 10,
     },
-    headerContainer: {
-        marginBottom: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    headerText: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        letterSpacing: 1,
-    },
-    settingItem: {
-        marginVertical: 12,
-        paddingHorizontal: 10,
-    },
-    settingLabel: {
-        fontSize: 18,
-        fontWeight: '600',
-    },
-    input: {
-        height: 45,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        borderRadius: 10,
-        paddingLeft: 15,
-        marginTop: 5,
-        fontSize: 16,
-    },
-    row: {
+    header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        marginBottom: 25,
+    },
+    headerText: {
+        fontSize: 28,
+        fontWeight: 'bold',
+    },
+    section: {
+        marginBottom: 25,
+    },
+    sectionTitle: {
+        fontSize: 14,
+        fontWeight: '600',
+        marginBottom: 10,
+        textTransform: 'uppercase',
+    },
+    settingItem: {
+        marginBottom: 15,
+    },
+    settingRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 10,
+    },
+    settingLabel: {
+        fontSize: 16,
+    },
+    input: {
+        height: 45,
+        borderRadius: 10,
+        paddingHorizontal: 15,
+        fontSize: 16,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        marginTop: 6,
     },
     footerButton: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 20,
-        padding: 10,
+        padding: 12,
         borderRadius: 10,
+        marginTop: 20,
     },
     footerButtonText: {
         marginLeft: 10,
         fontSize: 16,
+        color: '#fff',
+        fontWeight: '600',
     },
 });
+

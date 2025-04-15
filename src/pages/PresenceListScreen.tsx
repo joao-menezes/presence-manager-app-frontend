@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StatusBar, FlatList, StyleSheet, Pressable, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView, StatusBar, FlatList, StyleSheet, Pressable, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Input, ListItem, CheckBox, Avatar } from '@rneui/themed';
 import { Ionicons } from '@expo/vector-icons';
 import { User } from "../interface/user.interface";
 import ToastService from "../service/toast.service";
-import { useTheme } from '../assets/themes/ThemeContext';
+import { useTheme } from '../context/ThemeContext';
 import { filterUsers } from '../service/search.service';
-import {ApiService} from "../service/api.service";
-import {logger} from "react-native-reanimated/lib/typescript/logger";
+import {Skeleton} from "@rneui/base";
 
 export function PresenceListScreen() {
     const { theme } = useTheme();
@@ -16,6 +15,7 @@ export function PresenceListScreen() {
     const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const mockUsers = [
         { userId: "1", username: "João Silva", age: 28 },
@@ -32,29 +32,25 @@ export function PresenceListScreen() {
 
     useEffect(() => {
         const fetchUsers = async () => {
+            setIsLoading(true)
             try {
-                const userData = await ApiService.getUsers();
-                setUsers(userData);
-                setFilteredUsers(userData);
+                // const userData = await ApiService.getUsers();
+                // setUsers(userData);
+                // setFilteredUsers(userData);
+                setUsers(mockUsers);
+                setFilteredUsers(mockUsers);
             } catch (error: any) {
                 console.error('Erro ao buscar usuários:', error);
-                if (error.response) {
-                    console.error('Resposta do servidor:', error.response.data);
-                    console.error('Status:', error.response.status);
-                } else if (error.request) {
-                    console.error('Nenhuma resposta recebida:', error.request);
-                } else {
-                    console.error('Erro na configuração da requisição:', error.message);
-                }
                 setError?.('Falha ao carregar os dados dos usuários');
                 setUsers(mockUsers);
                 setFilteredUsers(mockUsers);
+            }finally {
+                setIsLoading(false)
             }
         };
 
         fetchUsers();
     }, []);
-
 
     const handleSearch = (query: string) => {
         setSearchQuery(query);
@@ -80,7 +76,7 @@ export function PresenceListScreen() {
         }
 
         try {
-            await ApiService.savePresence(presenceList);
+            // await ApiService.savePresence(presenceList);
             ToastService.showSuccess("Sucesso!", "Lista salva com sucesso.");
         } catch (error) {
             ToastService.showError("Erro!", "Erro ao salvar lista de presença.");
@@ -88,14 +84,63 @@ export function PresenceListScreen() {
         }
     }
 
+    const renderUserItem = ({ item }: { item: User }) => {
+        if (!item) return null;
+        return (
+            <>
+            <Pressable
+                onPress={() => handleCheckBoxChange(item.userId)}
+                style={({ pressed }) => [
+                    styles.listItem,
+                    {
+                        backgroundColor: pressed
+                            ? theme.colors.selectedItem
+                            : theme.colors.card
+                    }
+                ]}
+            >
+                <ListItem
+                    bottomDivider
+                    containerStyle={[styles.listItemContainer, { backgroundColor: theme.colors.card }]}
+                >
+                    <Avatar
+                        rounded
+                        title={item.username[0]}
+                        containerStyle={[
+                            styles.avatar,
+                            { backgroundColor: theme.colors.avatarBackground },
+                        ]}
+                    />
+                    <ListItem.Content>
+                        <ListItem.Title style={[styles.title, { color: theme.colors.text }]}>
+                            {item.username}
+                        </ListItem.Title>
+                        <ListItem.Subtitle style={[styles.subtitle, { color: theme.colors.subtitleText }]}>
+                            {item.age} anos
+                        </ListItem.Subtitle>
+                    </ListItem.Content>
+                    <CheckBox
+                        checked={selectedItems.includes(item.userId)}
+                        onPress={() => handleCheckBoxChange(item.userId)}
+                        containerStyle={[styles.checkboxContainer, { backgroundColor: 'transparent' }]}
+                        checkedColor={theme.colors.primary}
+                    />
+                </ListItem>
+            </Pressable>
+            </>
+        );
+    };
+
+
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
             <StatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} />
+
             <Input
                 placeholder="Buscar por nome ou idade..."
                 value={searchQuery}
                 onChangeText={handleSearch}
-                containerStyle={[styles.searchInput]}
+                containerStyle={styles.searchInput}
                 leftIcon={<Ionicons name="search" size={20} color={theme.colors.text} />}
                 inputContainerStyle={[
                     styles.inputContainer,
@@ -106,55 +151,25 @@ export function PresenceListScreen() {
                 ]}
                 placeholderTextColor={theme.colors.placeholder}
             />
-            <TouchableOpacity
+
+            <Pressable
                 onPress={() => savePresenceList(mockUsers)}
                 style={[styles.saveButton, { backgroundColor: theme.colors.primary }]}
-                activeOpacity={0.7}
+                disabled={isLoading}
             >
                 <Ionicons name={"save-outline"} size={20} color="#fff" />
-                <Text style={[styles.saveButtonText, {color: "#fff"}]}>Salvar</Text>
-            </TouchableOpacity>
+                <Text style={[styles.saveButtonText, { color: "#fff" }]}>Salvar</Text>
+            </Pressable>
 
-            <FlatList
-                data={filteredUsers}
-                keyExtractor={(item) => item.userId}
-                renderItem={({ item }) => (
-                    <Pressable
-                        onPress={() => handleCheckBoxChange(item.userId)}
-                        style={({ pressed }) => [
-                            styles.listItem,
-                            {
-                                backgroundColor: pressed
-                                    ? theme.colors.selectedItem
-                                    : theme.colors.card
-                            }
-                        ]}
-                    >
-                        <ListItem bottomDivider containerStyle={[styles.listItemContainer, { backgroundColor: theme.colors.card }]}>
-                            <Avatar
-                                rounded
-                                title={item.username[0]}
-                                containerStyle={[
-                                    styles.avatar,
-                                    {
-                                        backgroundColor: theme.colors.avatarBackground,
-                                    }
-                                ]}
-                            />
-                            <ListItem.Content>
-                                <ListItem.Title style={[styles.title, { color: theme.colors.text }]}>{item.username}</ListItem.Title>
-                                <ListItem.Subtitle style={[styles.subtitle, { color: theme.colors.subtitleText }]}>{item.age} anos</ListItem.Subtitle>
-                            </ListItem.Content>
-                            <CheckBox
-                                checked={selectedItems.includes(item.userId)}
-                                onPress={() => handleCheckBoxChange(item.userId)}
-                                containerStyle={[styles.checkboxContainer, { backgroundColor: 'transparent' }]}
-                                checkedColor={theme.colors.primary}
-                            />
-                        </ListItem>
-                    </Pressable>
-                )}
-            />
+            {isLoading ? (
+                <Skeleton animation={"pulse"} width={210} height={118} />
+            ) : (
+                <FlatList
+                    data={filteredUsers}
+                    keyExtractor={(item) => item.userId}
+                    renderItem={renderUserItem}
+                />
+            )}
         </SafeAreaView>
     );
 }
@@ -210,5 +225,5 @@ const styles = StyleSheet.create({
     checkboxContainer: {
         padding: 0,
         margin: 0,
-    },
+    }
 });

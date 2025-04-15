@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import NavigationDrawer from "./navigation/NavigationDrawer";
 import { UserProvider } from "./context/UserContext";
-import { ThemeProvider, useTheme } from './assets/themes/ThemeContext';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 import Toast from "react-native-toast-message";
 
 const AppContent: React.FC = () => {

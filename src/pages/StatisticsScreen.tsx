@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, StyleSheet, Dimensions } from "react-native";
-import { BarChart } from "react-native-chart-kit";
+import { LineChart } from "react-native-chart-kit";
 
 type User = {
     userId: string;
@@ -17,7 +17,7 @@ const mockUsers: User[] = [
     { userId: "5", username: "Lucas Pereira", totalClasses: 20, attendedClasses: 12 },
     { userId: "6", username: "Carla Rocha", totalClasses: 20, attendedClasses: 19 },
     { userId: "7", username: "Rafael Santos", totalClasses: 20, attendedClasses: 10 },
-    { userId: "8", username: "Juliana Almeida", totalClasses: 20, attendedClasses: 16 },
+    { userId: "8", username: "Juliana Almeida", totalClasses: 20, attendedClasses: 10 },
     { userId: "9", username: "Felipe Martins", totalClasses: 20, attendedClasses: 14 },
     { userId: "10", username: "Larissa Mendes", totalClasses: 20, attendedClasses: 13 }
 ];
@@ -30,6 +30,8 @@ export const StatisticsScreen = () => {
         ? (totalPresence / (users.length * 20)) * 100
         : 0;
 
+    const sortedUsers = [...users].sort((a, b) => b.attendedClasses - a.attendedClasses);
+
     return (
         <ScrollView style={styles.container}>
             <Text style={styles.title}>Estatísticas de Presença</Text>
@@ -41,26 +43,28 @@ export const StatisticsScreen = () => {
             </View>
 
             <Text style={styles.subTitle}>Presença por Aluno</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <BarChart
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingRight: 20 }}>
+                <LineChart
                     data={{
-                        labels: users.map(user => user.username.split(" ")[0]),
-                        datasets: [{ data: users.map(user => user.attendedClasses) }]
+                        labels: sortedUsers.map(user => user.username.split(" ")[0]),
+                        datasets: [
+                            {
+                                data: sortedUsers.map(user => user.attendedClasses),
+                                strokeWidth: 2,
+                            },
+                        ],
                     }}
-                    width={Math.max(Dimensions.get("window").width, users.length * 60)}
+                    width={Math.max(Dimensions.get("window").width, sortedUsers.length * 70)}
                     height={260}
                     chartConfig={{
-                        backgroundColor: "#1E2923",
-                        backgroundGradientFrom: "#2C5364",
-                        backgroundGradientTo: "#203A43",
-                        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                        labelColor: () => "#fff",
-                        barPercentage: 0.6,
-                        propsForDots: { r: "6", strokeWidth: "2", stroke: "#ffa726" }
+                        backgroundColor: "#F5F5F5",
+                        backgroundGradientFrom: "#FFFFFF",
+                        backgroundGradientTo: "#FFFFFF",
+                        color: (opacity = 1) => `rgba(0, 123, 255, ${opacity})`,
+                        labelColor: () => "#333",
+                        strokeWidth: 2,
+                        propsForDots: { r: "6", strokeWidth: "2", stroke: "#007BFF" },
                     }}
-                    verticalLabelRotation={30}
-                    yAxisLabel=""
-                    yAxisSuffix=" aulas"
                     style={styles.chart}
                 />
             </ScrollView>
@@ -114,5 +118,5 @@ const styles = StyleSheet.create({
         marginVertical: 20,
         borderRadius: 12,
         elevation: 2,
-    }
+    },
 });

@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
-import {Theme} from "./theme.types";
-import {lightTheme} from "./lightTheme";
-import {darkTheme} from "./darkTheme";
+import {Theme} from "../assets/themes/theme.types";
+import {lightTheme} from "../assets/themes/lightTheme";
+import {darkTheme} from "../assets/themes/darkTheme";
 
 const ThemeContext = createContext<{
     theme: Theme;

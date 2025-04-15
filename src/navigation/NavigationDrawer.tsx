@@ -11,13 +11,14 @@ import { UserContext } from "../context/UserContext";
 import { PresenceListScreen } from "../pages/PresenceListScreen";
 import { SettingsScreen } from "../pages/SettingsScreen";
 import { StatisticsScreen } from "../pages/StatisticsScreen";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { useTheme } from "../assets/themes/ThemeContext";
+import { useTheme } from "../context/ThemeContext";
+import {CardDivider} from "@rneui/base/dist/Card/Card.Divider";
 
 type DrawerParamList = {
     "student list": undefined;
     Settings: undefined;
     Statistics: undefined;
+    "GradientTest": undefined;
 };
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
@@ -49,12 +50,12 @@ export default function NavigationDrawer() {
                 options={({ navigation }) => ({
                     title: "Lista de Alunos",
                     headerRight: () => (
-                        <TouchableOpacity
+                        <Pressable
                             style={{ marginRight: 15 }}
                             onPress={() => console.log("")}
                         >
                             <Ionicons name="time-outline" size={24} color="#007bff" />
-                        </TouchableOpacity>
+                        </Pressable>
                     ),
                 })}
             />
@@ -97,16 +98,20 @@ function CustomDrawerContent(props: any) {
                     label="Lista de Presença"
                     icon={({ color }) => <Ionicons name="list-outline" size={22} color={color} />}
                     labelStyle={{ color: theme.colors.text }}
-                    onPress={() => props.navigation.navigate("student list")}
+                    onPress={() => {
+                        if (props.navigation) {
+                            props.navigation.navigate("student list");
+                        }
+                    }}
                 />
-                <View style={[styles.separator, { backgroundColor: theme.colors.border }]} />
+                <CardDivider/>
                 <DrawerItem
                     label="Estatísticas"
                     icon={({ color }) => <Ionicons name="bar-chart-outline" size={22} color={color} />}
                     labelStyle={{ color: theme.colors.text }}
                     onPress={() => props.navigation.navigate("Statistics")}
                 />
-                <View style={[styles.separator, { backgroundColor: theme.colors.border }]} />
+                <CardDivider/>
             </DrawerContentScrollView>
 
             <View style={styles.footerContainer}>
@@ -127,7 +132,14 @@ function CustomDrawerContent(props: any) {
 
 
                 <Pressable
-                    style={[styles.bottomButton, { backgroundColor: "#ff4d4d" }]}
+                    style={({ pressed }) => [
+                        styles.footerItem,
+                        styles.bottomButton,
+                        {
+                            backgroundColor: pressed ? "#fb6767" : "#ff4d4d",
+                            marginBottom: 10
+                        }
+                    ]}
                     onPress={() => {}}
                 >
                     <Ionicons name="log-out-outline" size={22} color="#fff" />
