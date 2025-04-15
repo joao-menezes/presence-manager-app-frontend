@@ -110,7 +110,7 @@ function CustomDrawerContent(props: any) {
                 <CardDivider/>
                 <DrawerItem
                     label="Estatísticas"
-                    icon={({ color }) => <Ionicons name="bar-chart-outline" size={22} color={color} />}
+                    icon={({ color }) => <Ionicons name="stats-chart-outline" size={22} color={color} />}
                     labelStyle={{ color: theme.colors.text }}
                     onPress={() => props.navigation.navigate("Statistics")}
                 />

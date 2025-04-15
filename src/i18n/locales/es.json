@@ -19,5 +19,12 @@
   "averageAttendance": "Promedio de Asistencia",
   "attendancePerStudent": "Asistencia por Estudiante",
   "presenceListSaved": "Lista de presencia guardada",
-  "errorSavingPresenceList": "Error al guardar la lista de presencia"
+  "errorSavingPresenceList": "Error al guardar la lista de presencia",
+  "monthlyAverage": "Media mensual",
+  "annualAverage": "Média Anual",
+  "Toast": {
+    "Success": "Sucesso",
+    "Info": "Info",
+    "Error": "Erro"
+  }
 }

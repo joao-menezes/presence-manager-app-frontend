@@ -1,12 +1,12 @@
 import axios from 'axios';
-import {User} from "../interface/user.interface";
+import {User} from "../common/interface/user.interface";
 
 export class ApiService {
     static api = axios.create({
         baseURL: 'http://localhost:3000/api',
     });
 
-    static savePresence = async (presenceList: User[]) => {
+    static async savePresence (presenceList: User[]){
         try {
             const response = await ApiService.api.post('/presence', presenceList);
             return response.data;
@@ -16,7 +16,7 @@ export class ApiService {
         }
     };
 
-    static getUsers = async () => {
+    static async getUsers()  {
         try {
             const response = await ApiService.api.get('/presence');
             return response.data;

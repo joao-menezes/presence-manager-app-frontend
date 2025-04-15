@@ -1,9 +1,9 @@
-import api from "./api.service";
-import {User} from "../interface/user.interface";
+import {User} from "../common/interface/user.interface";
+import {ApiService} from "./api.service";
 
 export const getUsers = async (): Promise<User[]> => {
     try {
-        const response = await api.get('/users');
+        const response = await ApiService.api.get('/users');
         return response.data.Users;
     } catch (error) {
         throw error;
@@ -12,7 +12,7 @@ export const getUsers = async (): Promise<User[]> => {
 
 export const setUsersPresence = async (): Promise<User[]> => {
     try {
-        const response = await api.post('/users');
+        const response = await ApiService.api.post('/users');
         return response.data.Users;
     } catch (error) {
         throw error;
@@ -21,7 +21,7 @@ export const setUsersPresence = async (): Promise<User[]> => {
 
 export const editUsersPresence = async (): Promise<User[]> => {
     try {
-        const response = await api.put('/users');
+        const response = await ApiService.api.put('/users');
         return response.data.Users;
     } catch (error) {
         throw error;

@@ -1,4 +1,4 @@
-import {UserEnum} from "../common/enums/user.enum";
+import {UserEnum} from "../enums/user.enum";
 
 export interface User {
     userId: string;

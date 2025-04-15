@@ -6,7 +6,6 @@ import {
     Text,
     TextInput,
     Pressable,
-    TouchableOpacity,
     ScrollView
 } from 'react-native';
 import { Ionicons, Feather } from '@expo/vector-icons';
@@ -16,6 +15,7 @@ import {useTranslation} from "react-i18next";
 import {Language} from "../common/types/language.types";
 import { Picker } from '@react-native-picker/picker';
 import i18n from "i18next";
+import ToastService from "../service/toast.service";
 
 export const SettingsScreen: React.FC = () => {
     const { theme, toggleTheme } = useTheme();
@@ -24,8 +24,8 @@ export const SettingsScreen: React.FC = () => {
     const { t } = useTranslation();
 
     const handleLanguageChange = (selectedLanguage: Language) => {
-        setLanguage(selectedLanguage); // Atualiza o estado do idioma
-        i18n.changeLanguage(selectedLanguage); // Muda o idioma
+        setLanguage(selectedLanguage);
+        i18n.changeLanguage(selectedLanguage);
     };
 
     return (
@@ -59,21 +59,9 @@ export const SettingsScreen: React.FC = () => {
                 </View>
 
                 <View style={styles.section}>
-                    <Text style={[styles.sectionTitle, { color: theme.colors.subtitleText }]}>{t('preferences')}</Text>
+                    <Text style={[styles.sectionTitle, { color: theme.colors.subtitleText, fontSize: 15 }]}>{t('preferences')}</Text>
 
-                    <TouchableOpacity style={[styles.settingItem, styles.settingRow]}>
-                        <Feather name="bell" size={20} color={theme.colors.text} />
-                        <Text style={[styles.settingLabel, { marginLeft: 10, color: theme.colors.text }]}>
-                            {t('notifications')}
-                        </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={[styles.settingItem, styles.settingRow]}>
-                        <Feather name="globe" size={20} color={theme.colors.text} />
-                        <Text style={[styles.settingLabel, { marginLeft: 10, color: theme.colors.text }]}>
-                            {t('language')}
-                        </Text>
-                    </TouchableOpacity>
+                    <Text style={[styles.sectionTitle, { color: theme.colors.subtitleText }]}>{t('language')}</Text>
 
                     <View style={[styles.dropdownContainer, { backgroundColor: theme.colors.inputBackground }]}>
                         <Picker
@@ -88,18 +76,10 @@ export const SettingsScreen: React.FC = () => {
                         </Picker>
                     </View>
                 </View>
-
-                <View style={styles.section}>
-                    <Text style={[styles.sectionTitle, { color: theme.colors.subtitleText }]}>{t('security')}</Text>
-
-                    <TouchableOpacity style={[styles.settingItem, styles.settingRow]}>
-                        <Feather name="lock" size={20} color={theme.colors.text} />
-                        <Text style={[styles.settingLabel, { marginLeft: 10, color: theme.colors.text }]}>
-                            {t('changePassword')}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
                 <Pressable
+                    onPress={() => {
+                        ToastService.showSuccess(t('success'), "Configurações salvas com sucesso");
+                    }}
                     style={[styles.footerButton, { backgroundColor: theme.colors.primary }]}
                 >
                     <Ionicons name="checkmark-done-outline" size={24} color="#fff" />

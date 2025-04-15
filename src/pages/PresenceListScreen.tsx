@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StatusBar, FlatList, StyleSheet, Pressable, Text, TouchableOpacity, ScrollView } from 'react-native';
+import {
+    SafeAreaView,
+    StatusBar,
+    FlatList,
+    StyleSheet,
+    Pressable,
+    Text,
+} from 'react-native';
 import { Input, ListItem, CheckBox, Avatar } from '@rneui/themed';
 import { Ionicons } from '@expo/vector-icons';
-import { User } from "../interface/user.interface";
+import { User } from "../common/interface/user.interface";
 import ToastService from "../service/toast.service";
 import { useTheme } from '../context/ThemeContext';
 import { filterUsers } from '../service/search.service';
@@ -150,6 +157,7 @@ export function PresenceListScreen() {
                         backgroundColor: theme.colors.inputBackground,
                     }
                 ]}
+                inputStyle={{ color: theme.colors.text }}
                 placeholderTextColor={theme.colors.placeholder}
             />
 
@@ -189,6 +197,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         borderRadius: 20,
         elevation: 3,
+        color: "#ccc"
     },
     saveButton: {
         flexDirection: 'row',

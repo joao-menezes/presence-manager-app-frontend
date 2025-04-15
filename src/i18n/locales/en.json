@@ -19,5 +19,12 @@
   "averageAttendance": "Average Attendance",
   "attendancePerStudent": "Attendance per Student",
   "presenceListSaved": "presence List Saved",
-  "errorSavingPresenceList": "Rrror Saving Presence List"
+  "errorSavingPresenceList": "Rrror Saving Presence List",
+  "monthlyAverage": "média mensal",
+  "annualAverage": "Annual Average",
+  "Toast": {
+    "Success": "Success",
+    "Info": "Info",
+    "Error": "Error"
+  }
 }
