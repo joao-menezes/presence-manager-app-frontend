@@ -3,7 +3,7 @@ import {User} from "../interface/user.interface";
 
 export class ApiService {
     static api = axios.create({
-        baseURL: 'http://192.168.15.43:3000/api',
+        baseURL: 'http://localhost:3000/api',
     });
 
     static savePresence = async (presenceList: User[]) => {
