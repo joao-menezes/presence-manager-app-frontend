@@ -4,6 +4,7 @@ import NavigationDrawer from "./navigation/NavigationDrawer";
 import { UserProvider } from "./context/UserContext";
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import Toast from "react-native-toast-message";
+import './i18n';
 
 const AppContent: React.FC = () => {
     const { theme } = useTheme();

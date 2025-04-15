@@ -7,6 +7,7 @@ import ToastService from "../service/toast.service";
 import { useTheme } from '../context/ThemeContext';
 import { filterUsers } from '../service/search.service';
 import {Skeleton} from "@rneui/base";
+import {useTranslation} from "react-i18next";
 
 export function PresenceListScreen() {
     const { theme } = useTheme();
@@ -16,6 +17,7 @@ export function PresenceListScreen() {
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const { t } = useTranslation();
 
     const mockUsers = [
         { userId: "1", username: "João Silva", age: 28 },
@@ -68,26 +70,26 @@ export function PresenceListScreen() {
 
     const savePresenceList = async (presenceList: User[]) => {
         if (!presenceList) {
-            return ToastService.showError("Erro!", "Lista de presença não definida.");
+            return ToastService.showError(t("error"), t("presenceListUndefined"));
         }
 
         if (presenceList.length === 0) {
-            return ToastService.showInfo("Atenção!", "Nenhum usuário foi adicionado à lista.");
+            return ToastService.showInfo(t("attention"), t("noUsersSelected"));
         }
 
         try {
             // await ApiService.savePresence(presenceList);
-            ToastService.showSuccess("Sucesso!", "Lista salva com sucesso.");
+            ToastService.showSuccess(t("success"), t("presenceListSaved"));
         } catch (error) {
-            ToastService.showError("Erro!", "Erro ao salvar lista de presença.");
+            ToastService.showError(t("error"), t("errorSavingPresenceList"));
             console.error("savePresenceList error", error);
         }
     }
 
+
     const renderUserItem = ({ item }: { item: User }) => {
         if (!item) return null;
         return (
-            <>
             <Pressable
                 onPress={() => handleCheckBoxChange(item.userId)}
                 style={({ pressed }) => [
@@ -116,7 +118,7 @@ export function PresenceListScreen() {
                             {item.username}
                         </ListItem.Title>
                         <ListItem.Subtitle style={[styles.subtitle, { color: theme.colors.subtitleText }]}>
-                            {item.age} anos
+                            {item.age} {t('age')}
                         </ListItem.Subtitle>
                     </ListItem.Content>
                     <CheckBox
@@ -127,7 +129,6 @@ export function PresenceListScreen() {
                     />
                 </ListItem>
             </Pressable>
-            </>
         );
     };
 
@@ -137,7 +138,7 @@ export function PresenceListScreen() {
             <StatusBar barStyle={theme.dark ? 'light-content' : 'dark-content'} />
 
             <Input
-                placeholder="Buscar por nome ou idade..."
+                placeholder={t('searchPlaceholder')}
                 value={searchQuery}
                 onChangeText={handleSearch}
                 containerStyle={styles.searchInput}
@@ -158,7 +159,7 @@ export function PresenceListScreen() {
                 disabled={isLoading}
             >
                 <Ionicons name={"save-outline"} size={20} color="#fff" />
-                <Text style={[styles.saveButtonText, { color: "#fff" }]}>Salvar</Text>
+                <Text style={[styles.saveButtonText, { color: "#fff" }]}>{t('save')}</Text>
             </Pressable>
 
             {isLoading ? (

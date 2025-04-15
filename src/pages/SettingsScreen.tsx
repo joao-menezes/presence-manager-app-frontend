@@ -11,27 +11,37 @@ import {
 } from 'react-native';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import ThemeToggleButton from '../Components/ThemeToggleButton';
-import {useTheme} from "../context/ThemeContext";
+import { useTheme } from "../context/ThemeContext";
+import {useTranslation} from "react-i18next";
+import {Language} from "../common/types/language.types";
+import { Picker } from '@react-native-picker/picker';
+import i18n from "i18next";
 
 export const SettingsScreen: React.FC = () => {
     const { theme, toggleTheme } = useTheme();
     const [username, setUsername] = useState('João Silva');
+    const [language, setLanguage] = useState<Language>('pt');
+    const { t } = useTranslation();
+
+    const handleLanguageChange = (selectedLanguage: Language) => {
+        setLanguage(selectedLanguage); // Atualiza o estado do idioma
+        i18n.changeLanguage(selectedLanguage); // Muda o idioma
+    };
 
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-            {/* Header */}
             <View style={styles.header}>
-                <Text style={[styles.headerText, { color: theme.colors.text }]}>Configurações</Text>
+                <Text style={[styles.headerText, { color: theme.colors.text }]}>{t('settings')}</Text>
                 <ThemeToggleButton toggleTheme={toggleTheme} />
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false}>
 
                 <View style={styles.section}>
-                    <Text style={[styles.sectionTitle, { color: theme.colors.subtitleText }]}>Perfil</Text>
+                    <Text style={[styles.sectionTitle, { color: theme.colors.subtitleText }]}>{t('profile')}</Text>
 
                     <View style={styles.settingItem}>
-                        <Text style={[styles.settingLabel, { color: theme.colors.text }]}>Nome do Usuário</Text>
+                        <Text style={[styles.settingLabel, { color: theme.colors.text }]}>{t('username')}</Text>
                         <TextInput
                             style={[
                                 styles.input,
@@ -42,37 +52,50 @@ export const SettingsScreen: React.FC = () => {
                             ]}
                             value={username}
                             onChangeText={setUsername}
-                            placeholder="Digite seu nome"
+                            placeholder={t('enterUsername')}
                             placeholderTextColor={theme.colors.placeholder}
                         />
                     </View>
                 </View>
 
                 <View style={styles.section}>
-                    <Text style={[styles.sectionTitle, { color: theme.colors.subtitleText }]}>Preferências</Text>
+                    <Text style={[styles.sectionTitle, { color: theme.colors.subtitleText }]}>{t('preferences')}</Text>
 
                     <TouchableOpacity style={[styles.settingItem, styles.settingRow]}>
                         <Feather name="bell" size={20} color={theme.colors.text} />
                         <Text style={[styles.settingLabel, { marginLeft: 10, color: theme.colors.text }]}>
-                            Notificações
+                            {t('notifications')}
                         </Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={[styles.settingItem, styles.settingRow]}>
                         <Feather name="globe" size={20} color={theme.colors.text} />
                         <Text style={[styles.settingLabel, { marginLeft: 10, color: theme.colors.text }]}>
-                            Idioma
+                            {t('language')}
                         </Text>
                     </TouchableOpacity>
+
+                    <View style={[styles.dropdownContainer, { backgroundColor: theme.colors.inputBackground }]}>
+                        <Picker
+                            selectedValue={language}
+                            style={{ color: theme.colors.inputText }}
+                            dropdownIconColor={theme.colors.primary}
+                            onValueChange={handleLanguageChange}
+                        >
+                            <Picker.Item label="Português" value="pt" />
+                            <Picker.Item label="Inglês" value="en" />
+                            <Picker.Item label="Espanhol" value="es" />
+                        </Picker>
+                    </View>
                 </View>
 
                 <View style={styles.section}>
-                    <Text style={[styles.sectionTitle, { color: theme.colors.subtitleText }]}>Segurança</Text>
+                    <Text style={[styles.sectionTitle, { color: theme.colors.subtitleText }]}>{t('security')}</Text>
 
                     <TouchableOpacity style={[styles.settingItem, styles.settingRow]}>
                         <Feather name="lock" size={20} color={theme.colors.text} />
                         <Text style={[styles.settingLabel, { marginLeft: 10, color: theme.colors.text }]}>
-                            Alterar Senha
+                            {t('changePassword')}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -80,14 +103,13 @@ export const SettingsScreen: React.FC = () => {
                     style={[styles.footerButton, { backgroundColor: theme.colors.primary }]}
                 >
                     <Ionicons name="checkmark-done-outline" size={24} color="#fff" />
-                    <Text style={styles.footerButtonText}>Salvar Alterações</Text>
+                    <Text style={styles.footerButtonText}>{t('saveChanges')}</Text>
                 </Pressable>
 
             </ScrollView>
         </SafeAreaView>
     );
 };
-
 
 const styles = StyleSheet.create({
     container: {
@@ -147,6 +169,13 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#fff',
         fontWeight: '600',
+    },
+    dropdownContainer: {
+        borderRadius: 10,
+        overflow: 'hidden',
+        borderColor: '#ccc',
+        borderWidth: 1,
+        marginTop: 10,
     },
 });
 

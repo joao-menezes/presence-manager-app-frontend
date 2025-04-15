@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, StyleSheet, Dimensions } from "react-native";
 import { LineChart } from "react-native-chart-kit";
+import {useTranslation} from "react-i18next";
 
 type User = {
     userId: string;
@@ -24,6 +25,7 @@ const mockUsers: User[] = [
 
 export const StatisticsScreen = () => {
     const [users, setUsers] = useState<User[]>(mockUsers);
+    const { t } = useTranslation();
 
     const totalPresence = users.reduce((acc, user) => acc + user.attendedClasses, 0);
     const averagePresence = users.length > 0
@@ -34,15 +36,15 @@ export const StatisticsScreen = () => {
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}>Estatísticas de Presença</Text>
+            <Text style={styles.title}>{t('attendanceStats')}</Text>
 
             <View style={styles.statsContainer}>
                 <Text style={styles.statText}>
-                    Média de Presença: <Text style={styles.statHighlight}>{averagePresence.toFixed(2)}%</Text>
+                    {t('averageAttendance')}: <Text style={styles.statHighlight}>{averagePresence.toFixed(2)}%</Text>
                 </Text>
             </View>
 
-            <Text style={styles.subTitle}>Presença por Aluno</Text>
+            <Text style={styles.subTitle}>{t('attendancePerStudent')}</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingRight: 20 }}>
                 <LineChart
                     data={{

@@ -13,6 +13,7 @@ import { SettingsScreen } from "../pages/SettingsScreen";
 import { StatisticsScreen } from "../pages/StatisticsScreen";
 import { useTheme } from "../context/ThemeContext";
 import {CardDivider} from "@rneui/base/dist/Card/Card.Divider";
+import {useTranslation} from "react-i18next";
 
 type DrawerParamList = {
     "student list": undefined;
@@ -24,6 +25,7 @@ type DrawerParamList = {
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
 export default function NavigationDrawer() {
+    const { t } = useTranslation();
     return (
         <Drawer.Navigator
             initialRouteName="student list"
@@ -63,14 +65,14 @@ export default function NavigationDrawer() {
                 name="Settings"
                 component={SettingsScreen}
                 options={{
-                    title: "Configurações",
+                    title: t('settings'),
                 }}
             />
             <Drawer.Screen
                 name="Statistics"
                 component={StatisticsScreen}
                 options={{
-                    title: "Estatísticas",
+                    title: t('statistics'),
                 }}
             />
         </Drawer.Navigator>
@@ -80,6 +82,7 @@ export default function NavigationDrawer() {
 function CustomDrawerContent(props: any) {
     const { username } = useContext(UserContext);
     const { theme } = useTheme();
+    const { t } = useTranslation();
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -127,7 +130,7 @@ function CustomDrawerContent(props: any) {
                     onPress={() => props.navigation.navigate("Settings")}
                 >
                     <Ionicons name="settings-outline" size={22} color={theme.colors.footerText} />
-                    <Text style={[styles.footerText, { color: theme.colors.footerText }]}>Configurações</Text>
+                    <Text style={[styles.footerText, { color: theme.colors.footerText }]}>{t('settings')}</Text>
                 </Pressable>
 
 
@@ -143,7 +146,7 @@ function CustomDrawerContent(props: any) {
                     onPress={() => {}}
                 >
                     <Ionicons name="log-out-outline" size={22} color="#fff" />
-                    <Text style={styles.logoutText}>Logout</Text>
+                    <Text style={styles.logoutText}>{t('logout')}</Text>
                 </Pressable>
             </View>
         </SafeAreaView>
